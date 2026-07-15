@@ -1,0 +1,102 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Aptos", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "Aptos", ui-monospace, SFMono-Regular, monospace;
+  
+  --color-primary-900: var(--primary-900);
+  --color-primary-950: var(--primary-950);
+  --color-accent-400: var(--accent-400);
+  --color-accent-500: var(--accent-500);
+  --color-accent-600: var(--accent-600);
+  --color-accent-50: var(--accent-50);
+  --color-accent-100: var(--accent-100);
+}
+
+:root {
+  /* Default: Navy/Sky */
+  --primary-900: #1e3a8a;
+  --primary-950: #172554;
+  --accent-50: #f0f9ff;
+  --accent-100: #e0f2fe;
+  --accent-400: #38bdf8;
+  --accent-500: #0ea5e9;
+  --accent-600: #0284c7;
+}
+
+[data-theme="slate"] {
+  --primary-900: #1e293b;
+  --primary-950: #0f172a;
+  --accent-50: #eef2ff;
+  --accent-100: #e0e7ff;
+  --accent-400: #818cf8;
+  --accent-500: #6366f1;
+  --accent-600: #4f46e5;
+}
+
+[data-theme="emerald"] {
+  --primary-900: #064e3b;
+  --primary-950: #022c22;
+  --accent-50: #f0fdfa;
+  --accent-100: #ccfbf1;
+  --accent-400: #2dd4bf;
+  --accent-500: #14b8a6;
+  --accent-600: #0d9488;
+}
+
+[data-theme="amber"] {
+  --primary-900: #292524;
+  --primary-950: #1c1917;
+  --accent-50: #fffbeb;
+  --accent-100: #fef3c7;
+  --accent-400: #fbbf24;
+  --accent-500: #f59e0b;
+  --accent-600: #d97706;
+}
+
+[data-theme="zinc"] {
+  --primary-900: #27272a;
+  --primary-950: #18181b;
+  --accent-50: #fafafa;
+  --accent-100: #f4f4f5;
+  --accent-400: #a1a1aa;
+  --accent-500: #71717a;
+  --accent-600: #52525b;
+}
+
+@media print {
+  html, body, #root, .min-h-screen {
+    height: auto !important;
+    min-height: auto !important;
+    overflow: visible !important;
+    display: block !important;
+    background: white !important;
+  }
+
+  main {
+    display: block !important;
+    overflow: visible !important;
+    height: auto !important;
+    min-height: auto !important;
+    padding: 0 !important;
+    background: white !important;
+  }
+
+  /* Prevent elements from being split across page breaks where possible */
+  tr, .card, .bg-white {
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+
+  /* Reset layout shadows/borders for printing */
+  .shadow, .shadow-sm, .shadow-md, .shadow-lg, .shadow-xl {
+    box-shadow: none !important;
+  }
+
+  /* Force background colors and colors to print accurately */
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    color-adjust: exact !important;
+  }
+}
