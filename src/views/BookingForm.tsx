@@ -895,13 +895,12 @@ export default function BookingForm({
         </div>
       </div>
 
-      {/* Row 2: Room, Time & Setup */}
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
-        {/* Booking Specifics */}
-        <div className="md:col-span-4 bg-white p-5 rounded border border-slate-200 shadow-sm flex flex-col gap-4">
-          <h2 className="text-xs font-bold text-slate-500 uppercase mb-1 flex items-center gap-2">
-            <span className="w-2 h-2 bg-primary-950"></span> Scheduling Logistics
-          </h2>
+      {/* Row 2: Scheduling Logistics */}
+      <div className="bg-white p-5 rounded border border-slate-200 shadow-sm flex flex-col gap-4">
+        <h2 className="text-xs font-bold text-slate-500 uppercase mb-1 flex items-center gap-2">
+          <span className="w-2 h-2 bg-primary-950"></span> Scheduling Logistics
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-1">
           <Input label="Requested Date *" required type="date" value={formData.requestedDate} onChange={e => handleInputChange('requestedDate', e.target.value)} />
           <Select label="Requested Time *" required value={formData.requestedTime} onChange={e => handleInputChange('requestedTime', e.target.value)} options={timeOptions} />
           <div className="flex flex-col">
@@ -911,76 +910,80 @@ export default function BookingForm({
             )}
           </div>
         </div>
+      </div>
 
-        {/* Setup Configuration */}
-        <div className="md:col-span-8 bg-white p-5 rounded border border-slate-200 shadow-sm flex flex-col justify-between">
-          <div>
-            <h2 className="text-xs font-bold text-slate-500 uppercase mb-4 flex items-center gap-2">
-              <span className="w-2 h-2 bg-primary-950"></span> Room Setup Configuration
-            </h2>
-            <div className="space-y-4">
-              <Checkbox 
-                label="Custom Setup Required" 
-                checked={formData.needsSetup} 
-                onChange={e => { 
-                  handleInputChange('needsSetup', e.target.checked); 
-                  if (!e.target.checked) handleInputChange('setupType', []); 
-                }} 
-              />
-              
-              {formData.needsSetup ? (
-                <div className="animate-in fade-in duration-300">
-                  <div className="flex flex-col gap-1.5">
-                    <label className="text-[11px] font-semibold text-slate-700">Setup Type(s) *</label>
-                    <div className="flex flex-col gap-2 p-3 border border-slate-300 rounded bg-white">
-                      {setupOptions.map(opt => (
-                        <Checkbox
-                          key={opt.value}
-                          label={opt.label}
-                          checked={formData.setupType.includes(opt.value)}
-                          onChange={e => {
-                            const current = [...formData.setupType];
-                            if (e.target.checked) {
-                              current.push(opt.value);
-                            } else {
-                              const idx = current.indexOf(opt.value);
-                              if (idx > -1) current.splice(idx, 1);
-                              // Clear setupNotes if Other is unchecked
-                              if (opt.value === 'Other (explain below)') {
-                                handleInputChange('setupNotes', '');
-                              }
+      {/* Row 3: Room Setup Configuration */}
+      <div className="bg-white p-5 rounded border border-slate-200 shadow-sm flex flex-col justify-between">
+        <div>
+          <h2 className="text-xs font-bold text-slate-500 uppercase mb-4 flex items-center gap-2">
+            <span className="w-2 h-2 bg-primary-950"></span> Room Setup Configuration
+          </h2>
+          <div className="space-y-4">
+            <Checkbox 
+              label="Custom Setup Required" 
+              checked={formData.needsSetup} 
+              onChange={e => { 
+                handleInputChange('needsSetup', e.target.checked); 
+                if (!e.target.checked) {
+                  handleInputChange('setupType', []); 
+                  handleInputChange('setupNotes', '');
+                }
+              }} 
+            />
+            
+            {formData.needsSetup ? (
+              <div className="animate-in fade-in duration-300">
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-[11px] font-semibold text-slate-700">Setup Type(s) *</label>
+                  <div className="flex flex-col gap-2 p-3 border border-slate-300 rounded bg-white">
+                    {setupOptions.map(opt => (
+                      <Checkbox
+                        key={opt.value}
+                        label={opt.label}
+                        checked={formData.setupType.includes(opt.value)}
+                        onChange={e => {
+                          const current = [...formData.setupType];
+                          if (e.target.checked) {
+                            current.push(opt.value);
+                          } else {
+                            const idx = current.indexOf(opt.value);
+                            if (idx > -1) current.splice(idx, 1);
+                            // Clear setupNotes if Other is unchecked
+                            if (opt.value === 'Other (explain below)') {
+                              handleInputChange('setupNotes', '');
                             }
-                            handleInputChange('setupType', current);
-                          }}
-                        />
-                      ))}
-                    </div>
-                    {formData.setupType.includes('Other (explain below)') && (
-                      <div className="mt-2 animate-in fade-in duration-300">
-                        <Input
-                          label="Other Setup Instructions *"
-                          placeholder="Please explain the requested setup..."
-                          required
-                          value={formData.setupNotes}
-                          onChange={(e) => handleInputChange('setupNotes', e.target.value)}
-                        />
-                      </div>
-                    )}
+                          }
+                          handleInputChange('setupType', current);
+                        }}
+                      />
+                    ))}
                   </div>
-                  <p className="mt-2 text-[11px] text-slate-500 italic">Select the desired arrangement for the reserved room.</p>
+                  {formData.setupType.includes('Other (explain below)') && (
+                    <div className="mt-3 animate-in fade-in duration-300">
+                      <Textarea
+                        label="Other Setup Instructions *"
+                        placeholder="Please explain the requested setup..."
+                        required
+                        value={formData.setupNotes}
+                        onChange={(e) => handleInputChange('setupNotes', e.target.value)}
+                        className="w-full"
+                      />
+                    </div>
+                  )}
                 </div>
-              ) : (
-                <div className="p-4 border border-dashed border-slate-200 rounded bg-slate-50/50">
-                  <p className="text-xs text-slate-400 text-center font-medium">Toggle "Custom Setup Required" to configure room arrangement.</p>
-                </div>
-              )}
-            </div>
+                <p className="mt-2 text-[11px] text-slate-500 italic">Select the desired arrangement for the reserved room.</p>
+              </div>
+            ) : (
+              <div className="p-4 border border-dashed border-slate-200 rounded bg-slate-50/50">
+                <p className="text-xs text-slate-400 text-center font-medium">Toggle "Custom Setup Required" to configure room arrangement.</p>
+              </div>
+            )}
           </div>
-          <div className="pt-4 border-t border-slate-100 mt-6">
-            <div className="p-3 bg-accent-50 rounded border border-accent-100 flex items-start gap-3">
-              <div className="text-accent-600 text-lg leading-none">ⓘ</div>
-              <p className="text-[11px] text-amber-800 leading-tight italic">Requests must be submitted 72 hours in advance. Some rooms may require additional security clearance.</p>
-            </div>
+        </div>
+        <div className="pt-4 border-t border-slate-100 mt-6">
+          <div className="p-3 bg-accent-50 rounded border border-accent-100 flex items-start gap-3">
+            <div className="text-accent-600 text-lg leading-none">ⓘ</div>
+            <p className="text-[11px] text-amber-800 leading-tight italic">Requests must be submitted 72 hours in advance. Some rooms may require additional security clearance.</p>
           </div>
         </div>
       </div>
