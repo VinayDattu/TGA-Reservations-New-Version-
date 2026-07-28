@@ -42,6 +42,7 @@ export interface Reservation {
   facilitiesNotes?: string;
   needsSetup?: boolean;
   setupType?: string[];
+  setupNotes?: string;
   additionalDetails?: string;
   departmentTasks?: DepartmentTask[];
   attachments?: { name: string; url: string; size: number }[];
@@ -75,6 +76,7 @@ export interface ReservationFormData {
   facilitiesNotes: string;
   needsSetup: boolean;
   setupType: string[];
+  setupNotes: string;
   
   additionalDetails: string;
   departmentTasks: DepartmentTask[];

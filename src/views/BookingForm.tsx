@@ -28,7 +28,7 @@ const INITIAL_STATE: ReservationFormData = {
   needsSecurity: false, securityNotes: '',
   needsCatering: false, cateringNotes: '',
   needsFacilities: false, facilitiesNotes: '',
-  needsSetup: false, setupType: [], additionalDetails: '',
+  needsSetup: false, setupType: [], setupNotes: '', additionalDetails: '',
   departmentTasks: [], attachments: []
 };
 
@@ -57,6 +57,7 @@ const mapReservationToFormData = (res: Reservation): ReservationFormData => {
     facilitiesNotes: res.facilitiesNotes || '',
     needsSetup: res.needsSetup || false,
     setupType: res.setupType || [],
+    setupNotes: res.setupNotes || '',
     additionalDetails: res.additionalDetails || '',
     departmentTasks: res.departmentTasks || [],
     attachments: res.attachments || [],
@@ -266,6 +267,8 @@ export default function BookingForm({
       ${formData.needsSecurity ? `<p><strong>Security Notes:</strong> ${formData.securityNotes}</p>` : ''}
       ${formData.needsCatering ? `<p><strong>Catering Notes:</strong> ${formData.cateringNotes}</p>` : ''}
       ${formData.needsFacilities ? `<p><strong>Facilities Notes:</strong> ${formData.facilitiesNotes}</p>` : ''}
+      ${formData.needsSetup ? `<p><strong>Setup Types:</strong> ${formData.setupType.join(', ')}</p>` : ''}
+      ${formData.needsSetup && formData.setupNotes ? `<p><strong>Setup Notes:</strong> ${formData.setupNotes}</p>` : ''}
       ${formData.attachments && formData.attachments.length > 0 ? `
         <h3>Attachments</h3>
         <ul>
@@ -480,8 +483,10 @@ export default function BookingForm({
       facilitiesNotes: formData.facilitiesNotes,
       needsSetup: formData.needsSetup,
       setupType: formData.setupType,
+      setupNotes: formData.setupNotes,
       additionalDetails: formData.additionalDetails,
       departmentTasks: formData.departmentTasks || [],
+      attachments: formData.attachments || [],
     };
 
     onSaveReservation(savedReservation);
@@ -616,6 +621,22 @@ export default function BookingForm({
 
               {/* Print Area Contents */}
               <div className="space-y-8">
+                {formData.needsSetup && (
+                  <div className="break-inside-avoid">
+                    <h2 className="text-xs font-bold uppercase tracking-widest text-slate-400 border-b border-slate-100 pb-2 mb-4 print:border-slate-300">
+                      Setup Requirements
+                    </h2>
+                    <div className="border border-slate-200 rounded p-5 bg-white shadow-sm print:border-slate-400 print:shadow-none">
+                      <p className="text-sm font-medium text-primary-950 mb-2"><strong>Requested Types:</strong> {formData.setupType.join(', ')}</p>
+                      {formData.setupNotes && (
+                        <p className="text-sm text-primary-900 whitespace-pre-wrap leading-relaxed font-sans">
+                          <strong>Notes:</strong> {formData.setupNotes}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                )}
+
                 <h2 className="text-xs font-bold uppercase tracking-widest text-slate-400 border-b border-slate-100 pb-2 flex items-center gap-2 print:border-slate-300">
                   <span>Assigned Departmental Instructions</span>
                   <span className="text-[10px] lowercase text-slate-400 font-normal print:hidden">
@@ -924,11 +945,26 @@ export default function BookingForm({
                             } else {
                               const idx = current.indexOf(opt.value);
                               if (idx > -1) current.splice(idx, 1);
+                              // Clear setupNotes if Other is unchecked
+                              if (opt.value === 'Other (explain below)') {
+                                handleInputChange('setupNotes', '');
+                              }
                             }
                             handleInputChange('setupType', current);
                           }}
                         />
                       ))}
+                      {formData.setupType.includes('Other (explain below)') && (
+                        <div className="mt-2 pl-6 animate-in fade-in duration-300">
+                          <Input
+                            label="Other Setup Instructions *"
+                            placeholder="Please explain the requested setup..."
+                            required
+                            value={formData.setupNotes}
+                            onChange={(e) => handleInputChange('setupNotes', e.target.value)}
+                          />
+                        </div>
+                      )}
                     </div>
                   </div>
                   <p className="mt-2 text-[11px] text-slate-500 italic">Select the desired arrangement for the reserved room.</p>
