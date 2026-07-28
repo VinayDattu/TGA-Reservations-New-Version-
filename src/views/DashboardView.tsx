@@ -3,7 +3,6 @@ import {
   Printer, CheckCircle2, Circle, Clock, AlertTriangle, Shield, Check, X, 
   RotateCw, Filter, Users, ShieldAlert, Wifi, WifiOff, RefreshCw, Layers, MapPin, Sparkles, AlertCircle
 } from 'lucide-react';
-import { VisixRoomStatus } from '../components/VisixRoomStatus';
 import { ROOMS_DATA, TIME_SLOTS } from '../data';
 import { Reservation } from '../types';
 
@@ -706,8 +705,6 @@ export default function DashboardView({ reservations: rawReservations, onEditRes
 
       {/* ACTION ALERTS AND NOTIFICATIONS HUB */}
 
-      {/* VISIX PANEL INTEGRATION */}
-      <VisixRoomStatus />
 
       {actionAlert && (
         <div className={`p-4 rounded-xl border flex items-center gap-3 animate-in slide-in-from-top-4 duration-300 ${

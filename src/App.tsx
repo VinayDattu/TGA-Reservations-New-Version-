@@ -3,6 +3,7 @@ import { Menu, ChevronLeft, LayoutDashboard, Calendar as CalendarIcon, List, Cal
 import DashboardView from './views/DashboardView';
 import ListView from './views/ListView';
 import CalendarView from './views/CalendarView';
+import WeeklyScheduleView from './views/WeeklyScheduleView';
 import BookingForm from './views/BookingForm';
 import DraftsView from './views/DraftsView';
 import FeedbackView from './views/FeedbackView';
@@ -20,10 +21,10 @@ export default function App() {
     localStorage.setItem('tnga_theme', theme);
   }, [theme]);
 
-  const [currentView, setCurrentView] = useState<'dashboard'|'calendar'|'list'|'book'|'drafts'|'feedback'>(() => {
+  const [currentView, setCurrentView] = useState<'dashboard'|'calendar'|'weekly'|'list'|'book'|'drafts'|'feedback'>(() => {
     const params = new URLSearchParams(window.location.search);
     const view = params.get('view');
-    if (view && ['dashboard', 'calendar', 'list', 'book', 'drafts', 'feedback'].includes(view)) {
+    if (view && ['dashboard', 'calendar', 'weekly', 'list', 'book', 'drafts', 'feedback'].includes(view)) {
       return view as any;
     }
     return 'dashboard';
@@ -219,6 +220,7 @@ export default function App() {
   const navItems = [
     { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
     { id: 'calendar', label: 'Calendar', icon: CalendarIcon },
+    { id: 'weekly', label: 'Weekly Schedule', icon: CalendarIcon },
     { id: 'list', label: 'List View', icon: List },
     { id: 'book', label: 'Book a Room', icon: CalendarPlus },
     { id: 'drafts', label: 'Drafts', icon: FileText },
@@ -339,6 +341,15 @@ export default function App() {
             onEditReservation={handleEditReservation} 
             onCreateReservationOnDate={handleCreateReservationOnDate}
             onTriggerPrint={handleTriggerPrint}
+          />
+        )}
+        {currentView === 'weekly' && (
+          <WeeklyScheduleView
+            reservations={reservations}
+            onToggleStatus={(res) => {
+              const newStatus = res.status === 'Confirmed' ? 'Pending' : 'Confirmed';
+              handleSaveReservation({ ...res, status: newStatus });
+            }}
           />
         )}
         {currentView === 'list' && (
