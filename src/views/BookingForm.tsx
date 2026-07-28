@@ -896,7 +896,7 @@ export default function BookingForm({
       </div>
 
       {/* Row 2: Room, Time & Setup */}
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-6 h-auto md:h-full lg:h-[300px]">
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
         {/* Booking Specifics */}
         <div className="md:col-span-4 bg-white p-5 rounded border border-slate-200 shadow-sm flex flex-col gap-4">
           <h2 className="text-xs font-bold text-slate-500 uppercase mb-1 flex items-center gap-2">
@@ -954,18 +954,18 @@ export default function BookingForm({
                           }}
                         />
                       ))}
-                      {formData.setupType.includes('Other (explain below)') && (
-                        <div className="mt-2 pl-6 animate-in fade-in duration-300">
-                          <Input
-                            label="Other Setup Instructions *"
-                            placeholder="Please explain the requested setup..."
-                            required
-                            value={formData.setupNotes}
-                            onChange={(e) => handleInputChange('setupNotes', e.target.value)}
-                          />
-                        </div>
-                      )}
                     </div>
+                    {formData.setupType.includes('Other (explain below)') && (
+                      <div className="mt-2 animate-in fade-in duration-300">
+                        <Input
+                          label="Other Setup Instructions *"
+                          placeholder="Please explain the requested setup..."
+                          required
+                          value={formData.setupNotes}
+                          onChange={(e) => handleInputChange('setupNotes', e.target.value)}
+                        />
+                      </div>
+                    )}
                   </div>
                   <p className="mt-2 text-[11px] text-slate-500 italic">Select the desired arrangement for the reserved room.</p>
                 </div>
