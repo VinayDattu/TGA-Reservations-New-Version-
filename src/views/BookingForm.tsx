@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { CheckCircle2, Printer, FileText, ArrowLeft, X, Plus, Upload, Paperclip, Trash2 } from 'lucide-react';
+import { CheckCircle2, Printer, FileText, ArrowLeft, X, Plus, Upload, Paperclip, Trash2, Eye } from 'lucide-react';
 import { ReservationFormData, Reservation, Department, Draft, DepartmentType, DepartmentTask } from '../types';
 import { ROOMS_DATA, SETUP_TYPES, TIME_SLOTS } from '../data';
 import { Input, Select, Checkbox, Textarea } from '../components/FormControls';
@@ -266,6 +266,12 @@ export default function BookingForm({
       ${formData.needsSecurity ? `<p><strong>Security Notes:</strong> ${formData.securityNotes}</p>` : ''}
       ${formData.needsCatering ? `<p><strong>Catering Notes:</strong> ${formData.cateringNotes}</p>` : ''}
       ${formData.needsFacilities ? `<p><strong>Facilities Notes:</strong> ${formData.facilitiesNotes}</p>` : ''}
+      ${formData.attachments && formData.attachments.length > 0 ? `
+        <h3>Attachments</h3>
+        <ul>
+          ${formData.attachments.map(file => `<li>${file.name} (${(file.size / 1024).toFixed(1)} KB)</li>`).join('')}
+        </ul>
+      ` : ''}
     `;
     const sourceHTML = header + content + footer;
     const source = 'data:application/vnd.ms-word;charset=utf-8,' + encodeURIComponent(sourceHTML);
@@ -650,6 +656,26 @@ export default function BookingForm({
                 )}
               </div>
 
+              {/* Attachments Section in Print View */}
+              {formData.attachments && formData.attachments.length > 0 && (
+                <div className="space-y-4 mt-8 break-inside-avoid">
+                  <h2 className="text-xs font-bold uppercase tracking-widest text-slate-400 border-b border-slate-100 pb-2 print:border-slate-300">
+                    Attachments Provided
+                  </h2>
+                  <div className="grid grid-cols-2 gap-4">
+                    {formData.attachments.map((file, i) => (
+                      <div key={i} className="flex items-center gap-3 p-3 border border-slate-200 rounded-lg bg-slate-50 print:bg-white print:border-slate-300">
+                        <Paperclip className="w-4 h-4 text-slate-400 shrink-0" />
+                        <div className="min-w-0">
+                          <p className="text-sm font-medium text-slate-700 truncate">{file.name}</p>
+                          <p className="text-[10px] text-slate-400 font-mono">{(file.size / 1024).toFixed(1)} KB</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
               {/* Document Footer */}
               <footer className="absolute bottom-8 left-8 right-8 text-center text-[10px] text-slate-400 font-mono border-t border-slate-100 pt-4 flex justify-between items-center print:static print:mt-16 print:pt-4 print:border-slate-300">
                 <p>Generated: {new Date().toLocaleDateString()}</p>
@@ -1015,18 +1041,31 @@ export default function BookingForm({
                     <div className="flex items-center gap-3 overflow-hidden">
                       <Paperclip className="w-4 h-4 text-slate-400 shrink-0" />
                       <div className="min-w-0">
-                        <p className="text-sm font-medium text-slate-700 truncate">{file.name}</p>
+                        <a href={file.url} target="_blank" rel="noopener noreferrer" className="text-sm font-medium text-slate-700 truncate hover:text-accent-600 hover:underline inline-block max-w-full">
+                          {file.name}
+                        </a>
                         <p className="text-[10px] text-slate-400 font-mono">{(file.size / 1024).toFixed(1)} KB</p>
                       </div>
                     </div>
-                    <button
-                      type="button"
-                      onClick={() => handleRemoveAttachment(i)}
-                      className="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded transition-colors"
-                      title="Remove attachment"
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </button>
+                    <div className="flex items-center gap-1">
+                      <a
+                        href={file.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="p-1.5 text-slate-400 hover:text-accent-600 hover:bg-accent-50 rounded transition-colors"
+                        title="View attachment"
+                      >
+                        <Eye className="w-4 h-4" />
+                      </a>
+                      <button
+                        type="button"
+                        onClick={() => handleRemoveAttachment(i)}
+                        className="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded transition-colors"
+                        title="Remove attachment"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    </div>
                   </div>
                 ))}
               </div>
