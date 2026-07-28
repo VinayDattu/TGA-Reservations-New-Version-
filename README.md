@@ -255,36 +255,3 @@ git push origin feature/your-feature-name
 
 **Version**: 1.0.0  
 **Last Updated**: 2026-07-28
-
-## 📝 Scripts Disponibles
-
-| Comando | Descripción |
-|---|---|
-| `npm run dev` | Servidor de desarrollo (puerto 3000) |
-| `npm run dev:server` | Servidor Node (Microsoft Graph - experimental) |
-| `npm run build` | Build producción |
-| `npm run preview` | Preview del build |
-| `npm run lint` | Verificar TypeScript |
-
-## 🧪 Testing
-
-(Pendiente - ver [docs/GAPS-ANALYSIS.md](docs/GAPS-ANALYSIS.md) Gap #18)
-
-## 🤝 Contribuir
-
-1. Revisar [docs/REFACTORING-ANALYSIS.md](docs/REFACTORING-ANALYSIS.md) para entender la arquitectura
-2. Crear branch desde `feature/gaps-analysis-and-improvements`
-3. Seguir convenciones de código establecidas
-4. No hacer commit hasta verificar que todo funciona
-
-## 📞 Contacto
-
-**Project Lead:** Vinay Datu - vinay.datu@capitol.tn.gov
-
-## 📄 Licencia
-
-Privado - Tennessee General Assembly
-
----
-
-**Última actualización:** 2026-07-28
