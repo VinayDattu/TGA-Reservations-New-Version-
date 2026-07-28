@@ -21,7 +21,7 @@ export interface Reservation {
   date: string;
   time: string;
   groupName: string;
-  status: 'Confirmed' | 'Pending';
+  status: 'Confirmed' | 'Pending' | 'Cancelled';
   
   // Detailed fields for persistence and editing
   memberSponsor?: string;
